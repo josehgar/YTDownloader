@@ -1,0 +1,25 @@
+[project]
+name = "YTDownloader"
+version = "1.0.0"
+dependencies = [
+    "flet==0.81.0",
+    "yt-dlp",
+    "flet-permission-handler",
+]
+
+[tool.flet.app]
+platforms = ["android"]
+
+[tool.flet.android]
+icon = "assets/icon.png"
+
+[tool.flet.android.permission]
+"android.permission.MANAGE_EXTERNAL_STORAGE" = true
+"android.permission.WRITE_EXTERNAL_STORAGE" = true
+"android.permission.READ_EXTERNAL_STORAGE" = true
+
+[tool.flet.flutter]
+dependencies = ["flet_permission_handler"]
+
+[tool.flet]
+packages = ["flet_permission_handler"]
