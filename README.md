@@ -1,14 +1,19 @@
+# 🎵 YTDownloader
+
 A simple Android app to search and download audio from YouTube, built with [Flet](https://flet.dev) and [yt-dlp](https://github.com/yt-dlp/yt-dlp).
 
 ## 📱 Screenshots
 
 Main screen
+
 <img width="485" height="708" alt="image" src="https://github.com/user-attachments/assets/0fdaa74e-62a2-4327-9357-32d5a7c05962" />
 
 Main screen with search
+
 <img width="480" height="721" alt="image" src="https://github.com/user-attachments/assets/69e1c1fd-d4aa-4699-8d46-8887b3d56ab5" />
 
 Downloading a song
+
 <img width="476" height="645" alt="image" src="https://github.com/user-attachments/assets/d2c83c16-15e6-493a-af62-a858f18e5b64" />
 
 
