@@ -130,8 +130,6 @@ async def main(page: ft.Page) -> None:
                             weight=ft.FontWeight.BOLD,
                             ),
                         ),
-
-                        ft.Container(expand=True),
                         ft.Container(
                             content=ft.Button(
                             content="Set path",
