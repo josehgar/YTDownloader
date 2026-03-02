@@ -113,7 +113,7 @@ async def main(page: ft.Page) -> None:
 
     page.add(
         ft.Column(
-            spacing=50,
+            spacing=25,
             expand=True,
             controls=[
                 ft.Divider(height=20, color="transparent"),
