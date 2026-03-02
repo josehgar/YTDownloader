@@ -38,7 +38,7 @@ Downloading a song
 ### Install dependencies
 
 ```bash
-pip install flet==0.81.0 yt-dlp flet-permission-handler
+pip install flet yt-dlp flet-permission-handler
 ```
 
 ### Run on desktop (for testing)
@@ -46,14 +46,6 @@ pip install flet==0.81.0 yt-dlp flet-permission-handler
 ```bash
 flet run main.py
 ```
-
-### Build for Android
-
-```bash
-flet build apk --include-packages flet_permission_handler
-```
-
-The APK will be generated in the `build/` folder.
 
 ## 📁 Project Structure
 
@@ -79,3 +71,8 @@ The author is not responsible for any misuse of this software.
 ## 📄 License
 
 This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
+
+## 🔰 Adittional information
+
+I am a 2th grade software engineering student and this is my first serious project. Any contribution will be appreciated.
+
