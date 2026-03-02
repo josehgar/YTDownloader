@@ -88,8 +88,8 @@ class SongCard(ft.Column):
                 actions=[ft.TextButton("Close", on_click=close_error)]
             )
 
-            page.overlay.extend([progress_dialog, dialog_success, dialog_error])
             progress_dialog.open = True
+            page.overlay.extend([progress_dialog, dialog_success, dialog_error])
             page.update()
 
             def run_download():
@@ -103,21 +103,22 @@ class SongCard(ft.Column):
                 try:
                     with yt.YoutubeDL(ydl_opts) as ydl:
                         ydl.download([self.url])
+                    progress_dialog.open=False
                     page.update()
-                    progress_dialog.open = False
                     dialog_success.open = True
+                    page.update()
 
 
                 except Exception as ex:
-                    print(f"Error descargando: {ex}")
                     progress_dialog.open = False
+                    page.update()
                     dialog_error.content = ft.Text(f"Error: {str(ex)}")
                     dialog_error.open = True
 
                 finally:
                     page.update()
 
-            run_download()
+            e.page.run_thread(run_download)
 
 
     @staticmethod

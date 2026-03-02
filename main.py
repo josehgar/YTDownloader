@@ -128,15 +128,15 @@ async def main(page: ft.Page) -> None:
                             size=30,
                             font_family="Montserrat",
                             weight=ft.FontWeight.BOLD,
-                            ),
+                            )
                         ),
                         ft.Container(
                             content=ft.Button(
-                            content="Set path",
-                            icon_color=ft.Colors.GREY_800,
-                            on_click=set_path
+                                content="Set path",
+                                icon_color=ft.Colors.GREY_800,
+                                on_click=set_path
                             ),
-                            padding=50
+                            # padding=50
                         )
 
                     ],
