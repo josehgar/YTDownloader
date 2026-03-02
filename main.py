@@ -1,6 +1,6 @@
 import flet as ft
 import yt_dlp as yt
-import json, os, stat, shutil
+import json, os
 from songcard import SongCard
 import flet_permission_handler as fph
 
@@ -8,25 +8,23 @@ download_path="None"
 json_file="config.json"
 
 
+# Async modifier needed for permissions and redirect tasks
 async def main(page: ft.Page) -> None:
-    p_handler = fph.PermissionHandler()
+    p_handler = fph.PermissionHandler() # Controls the permissions of the app
     result = await p_handler.request(fph.Permission.MANAGE_EXTERNAL_STORAGE)
-    print(f"Resultado: {result}")
-    if result == fph.PermissionStatus.GRANTED:
-        page.snack_bar = ft.SnackBar(content=ft.Text("Permiso concedido ✓"))
-        page.snack_bar.open = True
+    if result == fph.PermissionStatus.DENIED:
         page.update()
-    else:
-        page.snack_bar = ft.SnackBar(content=ft.Text("Permiso denegado, abre ajustes"))
-        page.snack_bar.open = True
-        page.update()
-        await p_handler.open_app_settings()
+        await p_handler.open_app_settings() # Gives the user the option to enable file management (needed to download)
+
+    # This block is in charge of importing data from .json
     global download_path
     if os.path.exists(json_file):
         with open(json_file, "r") as f:
             data=json.load(f)
             download_path=data["download_path"]
-    page.title="Youtube Downloader MP3"
+
+    # Configuration of the App
+    page.title="Youtube Downloader M4A"
     page.horizontal_alignment=ft.CrossAxisAlignment.CENTER
     page.window.width=500
     page.window.height=800
@@ -35,6 +33,7 @@ async def main(page: ft.Page) -> None:
         "Montserrat": "Montserrat-VariableFont_wght.ttf"
     }
 
+    # Controls the upper text that displays the download directory and FilePicker instance
     file_picker=ft.FilePicker()
     path_text=ft.Text(
         spans=[
@@ -47,12 +46,13 @@ async def main(page: ft.Page) -> None:
         align=ft.Alignment.TOP_LEFT,
     )
 
+    # It sets the directory and saves that data into .json
     async def set_path(e):
         global download_path
-        ruta_seleccionada=await file_picker.get_directory_path()
+        ruta_seleccionada=await file_picker.get_directory_path() # Default file protocol
         if ruta_seleccionada:
             download_path = ruta_seleccionada
-            path_text.spans[1].text = download_path
+            path_text.spans[1].text = download_path # "Download path" text (in white color)
             path_text.spans[1].style = ft.TextStyle(color=ft.Colors.GREEN_400)
         else:
             download_path = "None"
@@ -65,6 +65,7 @@ async def main(page: ft.Page) -> None:
             json.dump({"download_path": download_path}, f)
         page.update()
 
+    # Grabs info from YouTube based on the entered query
     def search_query(e):
         query=e.control.value
         if not query:
@@ -136,7 +137,6 @@ async def main(page: ft.Page) -> None:
                                 icon_color=ft.Colors.GREY_800,
                                 on_click=set_path
                             ),
-                            # padding=50
                         )
 
                     ],

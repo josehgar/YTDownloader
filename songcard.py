@@ -10,8 +10,8 @@ class SongCard(ft.Column):
         self.color = ft.Colors.GREY_700
         self.radius = 20
         self.text = text
-        self.url = url
-        self.destination = destination
+        self.url = url # Url is passed as parameter to manage the video URL from all points of the project
+        self.destination = destination # Same as url, but with the download path
         self.controls = [ft.Container(
             width=self.width,
             height=self.height,
@@ -41,9 +41,11 @@ class SongCard(ft.Column):
             padding=10,
         )]
 
+    # It redirects to the original YouTube video
     async def __redirect_song(self, e):
         await self.page.launch_url(self.url)
 
+    # Manages the download process and AlertDialogs
     def __download_song(self, e):
         def close_path(e):
             dialog_path.open=False
@@ -118,7 +120,7 @@ class SongCard(ft.Column):
                 finally:
                     page.update()
 
-            e.page.run_thread(run_download)
+            e.page.run_thread(run_download) # Used Flet thread method (the one from 'threading' class gives problems)
 
 
     @staticmethod
@@ -127,6 +129,7 @@ class SongCard(ft.Column):
             return text
         else:
             return text[:70] + "..."
+
 
     def get_fixed_destination(self, destination: str) -> str:
         if destination.endswith("/"):
