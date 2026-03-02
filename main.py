@@ -116,7 +116,7 @@ async def main(page: ft.Page) -> None:
             spacing=25,
             expand=True,
             controls=[
-                ft.Divider(height=20, color="transparent"),
+                ft.Divider(height=75, color="transparent"),
                 path_text,
                 ft.Row(
                     controls=[
