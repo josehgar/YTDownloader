@@ -1,5 +1,7 @@
 import flet as ft
 import yt_dlp as yt
+from mutagen.mp4 import MP4, MP4Cover
+import requests
 
 
 class SongCard(ft.Column):
@@ -105,6 +107,21 @@ class SongCard(ft.Column):
                 try:
                     with yt.YoutubeDL(ydl_opts) as ydl:
                         ydl.download([self.url])
+
+                        # It writes metadata from YouTube into the .m4a file
+                        info=ydl.extract_info(self.url, download=True)
+                        file_path = f'{self.get_fixed_destination(self.destination)}{info["title"]}.m4a'
+                        audio=MP4(file_path)
+                        audio['\xa9nam'] = [info.get('title', '')]
+                        audio['\xa9ART'] = [info.get('uploader', '')]
+                        audio['\xa9day'] = [info.get('upload_date', '')[:4]]
+                        audio['\xa9cmt'] = [info.get('description', '')]
+                        thumbnail_url = info.get('thumbnail')
+                        if thumbnail_url:
+                            img_data = requests.get(thumbnail_url).content
+                            audio['covr'] = [MP4Cover(img_data, imageformat=MP4Cover.FORMAT_JPEG)]
+
+                        audio.save()
                     progress_dialog.open=False
                     page.update()
                     dialog_success.open = True

@@ -47,6 +47,15 @@ pip install flet yt-dlp flet-permission-handler
 flet run main.py
 ```
 
+### Problems with libraries?
+
+If your IDE doesn't detect the libraries, execute this lines to generate a virtual environment
+```bash
+python -m venv .venv
+.venv\Scripts\activate
+pip install -r requirements.txt
+```
+
 ## 📁 Project Structure
 
 ```
