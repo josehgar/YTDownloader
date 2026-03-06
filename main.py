@@ -46,6 +46,7 @@ async def main(page: ft.Page) -> None:
         align=ft.Alignment.TOP_LEFT,
     )
 
+
     # It sets the directory and saves that data into .json
     async def set_path(e):
         global download_path

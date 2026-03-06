@@ -96,6 +96,24 @@ class SongCard(ft.Column):
             page.overlay.extend([progress_dialog, dialog_success, dialog_error])
             page.update()
 
+            # Crops the image to a squared format
+            def crop_to_square(image_bytes: bytes) -> bytes:
+                from PIL import Image
+                import io
+
+                img = Image.open(io.BytesIO(image_bytes))
+                w, h = img.size
+                size = min(w, h)
+
+                # Crop centrado
+                left = (w - size) // 2
+                top = (h - size) // 2
+                img_cropped = img.crop((left, top, left + size, top + size))
+
+                output = io.BytesIO()
+                img_cropped.save(output, format="JPEG", quality=95)
+                return output.getvalue()
+
             def run_download():
                 ydl_opts = {
                     'format': 'bestaudio[ext=m4a]/bestaudio',
@@ -119,6 +137,7 @@ class SongCard(ft.Column):
                         thumbnail_url = info.get('thumbnail')
                         if thumbnail_url:
                             img_data = requests.get(thumbnail_url).content
+                            img_data = crop_to_square(img_data)
                             audio['covr'] = [MP4Cover(img_data, imageformat=MP4Cover.FORMAT_JPEG)]
 
                         audio.save()
