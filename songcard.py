@@ -116,15 +116,23 @@ class SongCard(ft.Column):
 
             def run_download():
                 ydl_opts = {
-                    'format': 'bestaudio[ext=m4a]/bestaudio',
+                    'format': 'bestaudio/18/best',  # ← este
                     'quiet': True,
                     'outtmpl': f'{self.get_fixed_destination(self.destination)}%(title)s.%(ext)s',
                     'noplaylist': True,
+                    'postprocessors': [{
+                        'key': 'FFmpegExtractAudio',
+                        'preferredcodec': 'm4a',
+                        'preferredquality': '192',
+                    }],
+                    'keepvideo': False,
                 }
 
                 try:
                     with yt.YoutubeDL(ydl_opts) as ydl:
-                        ydl.download([self.url])
+                        info = ydl.extract_info(self.url, download=False)
+                        print(f"URL: {self.url}")
+                        print(f"Formatos disponibles: {[f['format_id'] for f in info.get('formats', [])]}")
 
                         # It writes metadata from YouTube into the .m4a file
                         info=ydl.extract_info(self.url, download=True)

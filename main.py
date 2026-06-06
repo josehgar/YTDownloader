@@ -78,7 +78,7 @@ async def main(page: ft.Page) -> None:
             "quiet": False,
             "skip_download": True,
             "no_playlist": True,
-            'extract_flat': True
+            'extract_flat': "in_playlist"
         }
 
         with yt.YoutubeDL(ydl_opts) as ydl:
