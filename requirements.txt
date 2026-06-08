@@ -2,3 +2,5 @@ flet
 yt-dlp
 flet-permission-handler
 mutagen
+pillow
+asyncio

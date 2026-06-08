@@ -1,6 +1,11 @@
+import asyncio
+
 import flet as ft
 import yt_dlp as yt
 import json, os
+
+from PIL.ImageChops import offset
+
 from songcard import SongCard
 import flet_permission_handler as fph
 
@@ -67,12 +72,14 @@ async def main(page: ft.Page) -> None:
         page.update()
 
     # Grabs info from YouTube based on the entered query
-    def search_query(e):
+    async def search_query(e):
+        song_list.controls.clear()
+        page.update()
+        song_list.update()
+
         query=e.control.value
         if not query:
             return
-
-        song_list.controls.clear()
 
         ydl_opts = {
             "quiet": False,
@@ -81,36 +88,53 @@ async def main(page: ft.Page) -> None:
             'extract_flat': "in_playlist"
         }
 
-        with yt.YoutubeDL(ydl_opts) as ydl:
-            busqueda=f"ytsearch5:{query}"
-            info=ydl.extract_info(busqueda, download=False)
-            entries = info.get("entries", [])
+        def async_search():
+            with yt.YoutubeDL(ydl_opts) as ydl:
+                busqueda=f"ytsearch5:{query}"
+                info=ydl.extract_info(busqueda, download=False)
+                return info.get("entries", [])
 
-            song_list.controls.clear()
+        entries = await asyncio.to_thread(async_search)
 
-            if not entries:
-                song_list.controls.append(
-                    ft.Text("No videos found")
-                )
-            else:
-                for song in entries:
-                    url = song.get("url")
-                    duration = song.get("duration")
+        if not entries:
+            song_list.controls.append(
+                 ft.Text("No videos found")
+            )
+        else:
+            for song in entries:
+                url = song.get("url")
+                duration = song.get("duration")
 
-                    if "youtube.com/channel/" in url or "youtube.com/@" in url:
-                        continue
+                if "youtube.com/channel/" in url or "youtube.com/@" in url:
+                    continue
 
-                    if duration is None:
-                        continue
+                if duration is None:
+                    continue
 
-                    titulo = song.get("title")
-                    song_list.controls.append(SongCard(titulo, url, download_path))
+                titulo = song.get("title")
+                song_list.controls.append(SongCard(titulo, url, download_path))
 
-            page.update()
+        page.update()
 
     song_list=ft.Column(
         scroll=ft.ScrollMode.ALWAYS,
         horizontal_alignment=ft.CrossAxisAlignment.CENTER,
+    )
+
+    def clean_searchbox(e):
+        search_box.value = ""
+        search_box.update()
+        song_list.controls.clear()
+        song_list.update()
+
+    search_box = ft.TextField(
+        align=ft.Alignment.CENTER,
+        hint_text="Search...",
+        bgcolor=ft.Colors.GREY_800,
+        border_width=0,
+        width=350,
+        height=70,
+        on_submit=search_query
     )
 
     page.add(
@@ -152,14 +176,16 @@ async def main(page: ft.Page) -> None:
                             font_family="Montserrat",
                             size=15
                         ),
-                        ft.TextField(
-                            align=ft.Alignment.CENTER,
-                            hint_text="Search...",
-                            bgcolor=ft.Colors.GREY_800,
-                            border_width=0,
-                            width=350,
-                            height=70,
-                            on_submit=search_query
+                        ft.Row(
+                            alignment = ft.MainAxisAlignment.CENTER,
+                            controls=[
+                                search_box,
+                                ft.IconButton(
+                                    offset=ft.Offset(0,-0.25),
+                                    icon=ft.Icons.DELETE,
+                                    on_click=clean_searchbox
+                                )
+                            ]
                         ),
                         song_list
                     ]
