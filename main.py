@@ -3,9 +3,6 @@ import asyncio
 import flet as ft
 import yt_dlp as yt
 import json, os
-
-from PIL.ImageChops import offset
-
 from songcard import SongCard
 import flet_permission_handler as fph
 
