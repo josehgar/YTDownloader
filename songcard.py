@@ -17,7 +17,7 @@ class SongCard(ft.Column):
         self.controls = [ft.Container(
             width=self.width,
             height=self.height,
-            border_radius=ft.border_radius.all(self.radius),
+            #border_radius=ft.border_radius.all(self.radius),
             bgcolor=self.color,
             content=ft.Row(
                 vertical_alignment=ft.CrossAxisAlignment.CENTER,
@@ -116,15 +116,10 @@ class SongCard(ft.Column):
 
             def run_download():
                 ydl_opts = {
-                    'format': 'bestaudio/18/best',  # ← este
+                    'format': 'bestaudio[ext=m4a]/bestaudio',
                     'quiet': True,
                     'outtmpl': f'{self.get_fixed_destination(self.destination)}%(title)s.%(ext)s',
                     'noplaylist': True,
-                    'postprocessors': [{
-                        'key': 'FFmpegExtractAudio',
-                        'preferredcodec': 'm4a',
-                        'preferredquality': '192',
-                    }],
                     'keepvideo': False,
                 }
 

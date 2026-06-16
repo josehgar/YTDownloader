@@ -82,6 +82,7 @@ async def main(page: ft.Page) -> None:
             "quiet": False,
             "skip_download": True,
             "no_playlist": True,
+            "format": "bestaudio[ext=m4a]",
             'extract_flat': "in_playlist"
         }
 
@@ -129,7 +130,7 @@ async def main(page: ft.Page) -> None:
         hint_text="Search...",
         bgcolor=ft.Colors.GREY_800,
         border_width=0,
-        width=350,
+        width=300,
         height=70,
         on_submit=search_query
     )
